@@ -167,7 +167,7 @@ var CITIES = [
 var APIS = {
     CITY: 'https://www.metaweather.com/api/location/search/?query=',
     WEATHER: 'https://www.metaweather.com/api/location/',
-    ALBUMS: 'http://musicbrainz.org/ws/2/recording?query=artist:%22Queen%22%20and%20type:%22album%22&fmt=json'
+    ALBUMS: 'https://musicbrainz.org/ws/2/recording?query=artist:%22Queen%22%20and%20type:%22album%22&fmt=json'
 };
 
 
