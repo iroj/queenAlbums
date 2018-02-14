@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CITIES, APIS } from './app.constants';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { mergeMap } from 'rxjs/operators/mergeMap';
 import 'rxjs/add/operator/map';
@@ -10,20 +10,26 @@ import { ICity } from './interfaces';
 @Injectable()
 export class AppService {
     private cityNames: Array<string> = CITIES;
-    constructor(public http: Http) { }
+    constructor(public http: HttpClient) { }
 
-    getCities(): Observable<Array<ICity>> {
+    getCities(): Observable<ICity[]> {
         const observableArray = this.cityNames.map((cityName) => {
-            return this.http.get(`${APIS.CITY}${cityName}`).map(res => res.json());
+            return this.http.get(`${APIS.CITY}${cityName}`).map(res => {
+                return res[0];
+            });
         });
         return forkJoin(observableArray);
     }
 
     async getAlbumsByCity(id: number) {
         const cityDetails = await this.http.get(`${APIS.WEATHER}${id}`)
-            .map(res => res.json()).toPromise();
+            .map(res => {
+                return res;
+            }).toPromise();
         const albums = await this.http.get(`${APIS.ALBUMS}`)
-            .map(res => res.json()).toPromise();
+            .map(res => {
+                return res;
+            }).toPromise();
         return this.getAlbums(cityDetails, albums);
     }
 
@@ -32,18 +38,35 @@ export class AppService {
             sunSet = new Date(cityDetails.sun_set);
         const diff = sunSet.getTime() - sunRise.getTime();
         const uniqueAlbums = {};
+        let sum = 0;
         albums.recordings.forEach(recording => {
             recording.releases.forEach(release => {
+                if (!recording.length || !release['track-count'] ||
+                    (sum + recording.length * release['track-count']) >= diff) {
+                    return;
+                }
                 if (!uniqueAlbums[release.title] ||
                     uniqueAlbums[release.title] < recording.length * release['track-count']) {
                     uniqueAlbums[release.title] = recording.length * release['track-count'];
+                    sum += recording.length * release['track-count'];
                 }
             });
         });
         return {
-            sunRise: cityDetails.sun_rise,
-            sunSet: cityDetails.sun_set,
-            uniqueAlbums: uniqueAlbums
+            sunrise: cityDetails.sun_rise,
+            sunset: cityDetails.sun_set,
+            daylight: diff,
+            totallength: sum,
+            uniqueAlbums: this.getArray(uniqueAlbums)
         };
+    }
+
+    getArray(obj) {
+        const array = [];
+        // tslint:disable-next-line:forin
+        for (const key in obj) {
+            array.push({ key: key, value: obj[key] });
+        }
+        return array;
     }
 }

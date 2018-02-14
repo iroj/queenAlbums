@@ -1,8 +1,49 @@
-<div class="row">
-  <div class="col-md-6">
-    From : {{sunRise}}
+<div class="container" *ngIf='albumdata$ | async'>
+  <div class="row">
+    <div class="col-md-6">
+      <h5>
+        From : {{(albumdata$ | async)?.sunrise | date:'hh:mm a zzzz'}}
+      </h5>
+    </div>
+    <div class="col-md-6">
+      <h5 class='float-right'>
+        To: {{(albumdata$ | async)?.sunset | date:'hh:mm a zzzz'}}
+      </h5>
+    </div>
   </div>
-  <div class="col-md-6">
-    To: {{sunSet}}
+
+  <div class="row">
+    <div class="col-md-12">
+      <table class='table table-striped'>
+        <thead>
+          <tr class='row'>
+            <td class='col-md-8 text-center'>
+              Album Title
+            </td>
+            <td class='col-md-4 text-center'>
+              Duration
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class='row' *ngFor='let album of (albumdata$ | async)?.uniqueAlbums; let i =index'>
+            <td class='col-md-8'>
+              {{i+1}}. {{album.key}}
+            </td>
+            <td class='col-md-4 text-center'>
+              {{album.value | durationPipe}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Daylight Duration: {{(albumdata$|async)?.daylight | durationPipe}}</h5>
+        </div>
+        <div class="col-md-6">
+          <h5>Total Track Length: {{(albumdata$|async)?.totallength | durationPipe}}</h5>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

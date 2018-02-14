@@ -1,12 +1,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <app-select-city [cities]='cities' (selectedCityChange)='cityChanged($event)'></app-select-city>
+      <app-select-city></app-select-city>
     </div>
   </div>
-  <div class="row" *ngIf='selectedCity'>
+  <div class="row">
     <div class="col-md-12">
-      <app-album-list [city]='selectedCity'></app-album-list>
+      <app-album-list *ngIf='selectedCity$ | async'></app-album-list>
     </div>
   </div>
 </div>

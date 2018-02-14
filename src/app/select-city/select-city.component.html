@@ -1,8 +1,8 @@
 <div class="col-md-12">
     <div class="form-group">
       <label for='city'>Select City</label>
-      <select id='city' class='form-control' [(ngModel)]='selectedCity' (ngModelChange)='cityChanged()'>
-        <option *ngFor='let city of cities' [ngValue]='city'>{{city.title}}</option>
+      <select id='city' class='form-control' [ngModel]='selectedCity$ | async' (ngModelChange)='cityChanged($event)'>
+        <option *ngFor='let city of cities$ | async' [ngValue]='city'>{{city.title}}</option>
       </select>
     </div>
   </div>

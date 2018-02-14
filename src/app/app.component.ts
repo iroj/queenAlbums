@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from './app.service';
 import { Observable } from 'rxjs/observable';
-import { ICity } from './interfaces';
+import { ICity, State } from './interfaces';
+import { Store } from '@ngrx/store';
+import * as selectors from './store/selectors';
 
 @Component({
   selector: 'app-root',
@@ -9,17 +11,14 @@ import { ICity } from './interfaces';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public cities: Array<ICity>;
-  selectedCity: ICity;
-  constructor(public service: AppService) { }
+  selectedCity$: Observable<ICity>;
+  constructor(private store: Store<State>) {
+    this.selectedCity$ = store.select(selectors.getCityState);
+  }
 
   ngOnInit() {
-    this.service.getCities().subscribe(results => {
-      this.cities = [].concat(...results);
-    });
+
   }
 
-  cityChanged(city: ICity) {
-    this.selectedCity = city;
-  }
+
 }
