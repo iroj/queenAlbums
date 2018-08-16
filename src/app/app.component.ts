@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from './app.service';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { ICity, State } from './interfaces';
 import { Store } from '@ngrx/store';
 import * as selectors from './store/selectors';

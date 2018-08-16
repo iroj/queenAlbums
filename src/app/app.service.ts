@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { mergeMap } from 'rxjs/operators/mergeMap';
 import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { ICity } from './interfaces';
 
 @Injectable()

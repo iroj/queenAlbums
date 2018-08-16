@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ICity, State } from '../interfaces';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import * as selectors from '../store/selectors';
 import { CityChangeAction } from '../store/city/actions';
